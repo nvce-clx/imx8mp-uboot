@@ -129,7 +129,7 @@ int board_init(void)
 	netc_init();
 
 	/* Boot M7 Real-Time core if firmwares are included in container */
-	power_on_m7("mx95optima");
+	power_on_m7("mx95optimarpmsg");
 
 	return 0;
 }
