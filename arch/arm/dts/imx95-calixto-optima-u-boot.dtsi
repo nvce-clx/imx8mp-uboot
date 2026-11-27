@@ -1,0 +1,215 @@
+// SPDX-License-Identifier: GPL-2.0+
+/*
+ * Copyright 2025 NXP
+ */
+
+#include "imx95-u-boot.dtsi"
+
+/ {
+	aliases {
+		pci0 = &netc_bus0;
+		pci1 = &netc_bus1;
+		usb0 = &usb3_dwc3;
+		usb1 = &usb2;
+		usb_gadget0 = &usb3_dwc3;
+		usb_gadget1 = &usbg2;
+		ethernet1 = &enetc_port2;
+		spi0 = &flexspi1;
+	};
+	
+	chosen {
+		bootargs = "console=ttyLP0,115200 earlycon";
+	};
+
+	usbg2: usbg2 {
+		compatible = "fsl,imx27-usb-gadget";
+		dr_mode = "peripheral";
+		chipidea,usb = <&usb2>;
+		bootph-pre-ram;
+		status = "okay";
+	};
+	
+	reg_aqr_stby: regulator-aqr-stby {
+		compatible = "regulator-fixed";
+		regulator-name = "aqr-stby";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+//		gpio = <&i2c5_pcal6408 1 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
+
+	reg_aqr_en: regulator-aqr-en {
+		compatible = "regulator-fixed";
+		regulator-name = "aqr-en";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		vin-supply = <&reg_aqr_stby>;
+//		gpio = <&i2c5_pcal6408 0 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
+
+	reg_serdes_stby: regulator-mac-stby {
+		compatible = "regulator-fixed";
+		regulator-name = "mac-stby";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+//		gpio = <&i2c7_pcal6524 13 GPIO_ACTIVE_LOW>;
+	};
+
+	reg_serdes_en: regulator-mac-en {
+		compatible = "regulator-fixed";
+		regulator-name = "mac-en";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		vin-supply = <&reg_serdes_stby>;
+//		gpio = <&i2c5_pcal6408 3 GPIO_ACTIVE_LOW>;
+	};
+};
+
+&enetc_port2 {
+	phy-handle = <&ethphy2>;
+	phy-mode = "10gbase-r";
+	serdes-supply = <&reg_serdes_en>;
+	managed = "in-band-status";
+	status = "okay";
+};
+
+&netc_emdio {
+	phy-supply = <&reg_aqr_en>;
+
+	ethphy2: ethernet-phy@8 {
+		compatible = "ethernet-phy-ieee802.3-c45";
+		reg = <8>;
+	};
+};
+
+&scmi_iomuxc {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_hog>;
+
+	pinctrl_hog: hoggrp {
+		bootph-pre-ram;
+
+		fsl,pins = <
+			IMX95_PAD_XSPI1_SS1_B__GPIO5_IO_BIT11			0x3fe
+			IMX95_PAD_GPIO_IO12__TPM3_CH2           0x51e
+			IMX95_PAD_CCM_CLKO1__GPIO3_IO_BIT26			0x30e
+			IMX95_PAD_CCM_CLKO2__GPIO3_IO_BIT27			0x30e
+		>;
+	};
+};
+
+&lpuart1 {
+	bootph-pre-ram;
+};
+
+&reg_usdhc2_vmmc {
+	bootph-pre-ram;
+};
+
+&usdhc1 {
+	bootph-pre-ram;
+};
+
+&usdhc2 {
+	bootph-pre-ram;
+};
+
+&wdog3 {
+	status = "disabled";
+};
+
+&pinctrl_uart1 {
+	bootph-pre-ram;
+};
+
+&pinctrl_usdhc1 {
+	bootph-pre-ram;
+};
+
+&pinctrl_usdhc1_100mhz {
+	bootph-pre-ram;
+};
+
+&pinctrl_usdhc1_200mhz {
+	bootph-pre-ram;
+};
+
+&pinctrl_usdhc2 {
+	bootph-pre-ram;
+};
+
+&pinctrl_usdhc2_100mhz {
+	bootph-pre-ram;
+};
+
+&pinctrl_usdhc2_200mhz {
+	bootph-pre-ram;
+};
+
+&pinctrl_usdhc2_gpio {
+	bootph-pre-ram;
+};
+
+&pinctrl_reg_usdhc2_vmmc {
+	bootph-pre-ram;
+};
+
+&usb2 {
+	compatible = "fsl,imx8mm-usb", "fsl,imx7d-usb";
+	/delete-property/power-domains;
+	bootph-pre-ram;
+};
+
+&usbmisc {
+	bootph-pre-ram;
+};
+
+&usbphynop {
+	bootph-pre-ram;
+};
+
+&usb3_phy {
+	bootph-pre-ram;
+};
+
+&usb3 {
+	clocks = <&scmi_clk IMX95_CLK_HSIO>,
+			 <&scmi_clk IMX95_CLK_24M>,
+			 <&scmi_clk IMX95_CLK_32K>;
+	clock-names = "hsio", "ref", "suspend";
+
+	/delete-property/power-domains;
+	bootph-pre-ram;
+};
+
+&usb3_dwc3 {
+	bootph-pre-ram;
+};
+
+&flexspi1 {
+	bootph-pre-ram;
+
+	flash@0{
+		bootph-pre-ram;
+	};
+};
+
+&pinctrl_flexspi1 {
+	bootph-pre-ram;
+};
+
+&pinctrl_flexspi1_reset {
+	bootph-pre-ram;
+};
+
+&dispmix_csr {
+	/delete-property/ assigned-clocks;
+	/delete-property/ assigned-clock-rates;
+	/delete-property/ assigned-clock-parents;
+};
+
+&mipi_dsi {
+	assigned-clocks = <&scmi_clk IMX95_CLK_MIPIPHYPLLBYPASS>;
+	assigned-clock-parents = <&scmi_clk IMX95_CLK_VIDEOPLL1>;
+};

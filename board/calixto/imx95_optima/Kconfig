@@ -1,0 +1,19 @@
+if TARGET_IMX95_OPTIMA
+
+config SYS_BOARD
+	default "imx95_optima"
+
+config SYS_VENDOR
+	default "calixto"
+
+config SYS_CONFIG_NAME
+	default "imx95_optima"
+	
+config IMX95_LPDDR4X_2GB
+	bool "Using LPDDR4 2GB RAM"
+	
+
+config IMX95_LPDDR4X_4GB
+	bool "Using LPDDR4 4GB RAM"
+
+endif
