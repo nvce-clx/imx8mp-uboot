@@ -395,7 +395,7 @@
 	pinctrl-names = "default";
 //	reset-gpio = <&i2c7_pcal6524 5 GPIO_ACTIVE_LOW>;
 	vpcie-supply = <&reg_pcie0>;
-	status = "okay";
+	status = "disabled";
 };
 
 &pcie0_ep {
@@ -410,7 +410,7 @@
 	pinctrl-names = "default";
 //	reset-gpio = <&i2c7_pcal6524 16 GPIO_ACTIVE_LOW>;
 	vpcie-supply = <&reg_slot_pwr>;
-	status = "okay";
+	status = "disabled";
 };
 
 &pcie1_ep {
